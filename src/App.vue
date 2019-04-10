@@ -163,9 +163,10 @@ export default {
         
     }
   },
-  mounted(){
-
+  methods: {
+      
   }
+  
 }
 </script>
 
@@ -181,8 +182,6 @@ export default {
         }
     }
     .ps_box {
-        &.int_id{padding-right: 110px;}
-        &.focus{border: solid 1px #08a600;}
         display: block;
         position: relative;
         width: 100%;
@@ -191,6 +190,23 @@ export default {
         padding: 10px 14px 10px 14px;
         background: #fff;
         @extend .border-box;
+        &.int_id{padding-right: 110px;}
+        &.focus{border: solid 1px #08a600;}
+        &.int_pass,
+        &.ps_box.int_pass_check{padding-right: 40px;}
+        &.int_pass,&.int_pass_check{
+            &:after{
+                content: '';
+                display: inline-block;
+                position: absolute;
+                top: 50%;
+                right: 16px;
+                width: 18px;
+                height: 20px;
+                margin-top: -10px;
+                cursor: pointer;
+            }
+        }
     }
     .ps_box_disable {
         display: block;
@@ -203,20 +219,7 @@ export default {
         @extend .border-box;
     }
 
-    .ps_box.int_pass, .ps_box.int_pass_check {
-        padding-right: 40px;
-    }
-    .ps_box.int_pass:after, .ps_box.int_pass_check:after {
-        content: '';
-        display: inline-block;
-        position: absolute;
-        top: 50%;
-        right: 16px;
-        width: 18px;
-        height: 20px;
-        margin-top: -10px;
-        cursor: pointer;
-    }
+   
     .ps_box.int_pass:after {
         background: #fff url(https://static.nid.naver.com/images/ui/join/pc_icon_pass_180417.png) 0 0 no-repeat;
     }
