@@ -1,6 +1,9 @@
 @charset 'utf-8';
 $bg_primary : #08a600;
-
+.btn_primary {
+    color: #fff;
+    background-color: $bg_primary;
+}
 .border-box {
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
