@@ -14,7 +14,7 @@
                     <div class="join_row">
                         <h3 class="join_title"><label for="id">아이디</label></h3>
                         <span class="ps_box int_id">
-                            <input type="text" id="id" name="id" class="int" title="ID" maxlength="20">
+                            <input type="text" id="id" name="id" class="int" title="ID" maxlength="20" >
                             <span class="step_url">@naver.com</span>
                         </span>
                         <span class="error_next_box" id="idMsg" style="" role="alert">필수 정보입니다.</span>
@@ -23,7 +23,7 @@
                     <div class="join_row">
                         <h3 class="join_title"><label for="pswd1">비밀번호</label></h3>
                         <span class="ps_box int_pass" id="pswd1Img">
-                            <input type="password" id="pswd1" name="pswd1" class="int" title="비밀번호 입력" aria-describedby="pswd1Msg" maxlength="20">
+                            <input type="password" id="pswd1" name="pswd1" class="int" title="비밀번호 입력" aria-describedby="pswd1Msg" maxlength="20" v-model="password" v-on:keyup="checkPassword">
                             <span class="lbl"><span id="pswd1Span" class="step_txt"></span></span>
                         </span>
                         <span class="error_next_box" id="pswd1Msg" style="" role="alert">필수 정보입니다.</span>
@@ -42,7 +42,7 @@
                     <div class="join_row">
                         <h3 class="join_title"><label for="name">이름</label></h3>
                         <span class="ps_box box_right_space">
-                            <input type="text" id="name" name="name" title="이름" class="int" maxlength="40">
+                            <input type="text" id="name" name="name" title="이름" class="int" maxlength="40" v-on:blur.stop="checkRequire(this)">
                         </span>
                         <span class="error_next_box" id="nameMsg" style="" role="alert">필수 정보입니다.</span>
                     </div>
@@ -158,13 +158,35 @@ import NationNumber from './components/NationNumber.vue'
 export default {
   name: 'App',
   components :{TestHeader,TestFooter,BasicButton,NationNumber},
-  data(){
-    return {
-        
+  data () {
+      return {
+          password :''
+      }
+  },
+  mounted (){
+      var inputs = document.getElementsByTagName("input");
+
+    for(var i = 0; i < inputs.length; ++i){
+        inputs[i].onfocus = function() {
+            this.parentNode.classList.add("focus");
+        }
+        inputs[i].onblur = function() {
+            this.parentNode.classList.remove("focus");
+        }
     }
   },
-  mounted(){
-
+  methods : {
+      //비밀번호 체크 유효성 검사
+      checkPassword : function(){
+          var regExpPw = /(?=.*\d{1,50})(?=.*[~`!@#$%\^&*()-+=]{1,50})(?=.*[a-zA-Z]{2,50}).{8,16}$/;
+          var password = this.password;
+          console.log(password.length)
+          if (!regExpPw.test(password)){
+              console.log("사용불가");
+          } else {
+              console.log("사용가능")
+          }
+      }
   }
 }
 </script>
@@ -181,8 +203,6 @@ export default {
         }
     }
     .ps_box {
-        &.int_id{padding-right: 110px;}
-        &.focus{border: solid 1px #08a600;}
         display: block;
         position: relative;
         width: 100%;
@@ -191,6 +211,23 @@ export default {
         padding: 10px 14px 10px 14px;
         background: #fff;
         @extend .border-box;
+        &.int_id{padding-right: 110px;}
+        &.focus{border: solid 1px #08a600;}
+        &.int_pass,
+        &.ps_box.int_pass_check{padding-right: 40px;}
+        &.int_pass,&.int_pass_check{
+            &:after{
+                content: '';
+                display: inline-block;
+                position: absolute;
+                top: 50%;
+                right: 16px;
+                width: 18px;
+                height: 20px;
+                margin-top: -10px;
+                cursor: pointer;
+            }
+        }
     }
     .ps_box_disable {
         display: block;
@@ -203,20 +240,7 @@ export default {
         @extend .border-box;
     }
 
-    .ps_box.int_pass, .ps_box.int_pass_check {
-        padding-right: 40px;
-    }
-    .ps_box.int_pass:after, .ps_box.int_pass_check:after {
-        content: '';
-        display: inline-block;
-        position: absolute;
-        top: 50%;
-        right: 16px;
-        width: 18px;
-        height: 20px;
-        margin-top: -10px;
-        cursor: pointer;
-    }
+   
     .ps_box.int_pass:after {
         background: #fff url(https://static.nid.naver.com/images/ui/join/pc_icon_pass_180417.png) 0 0 no-repeat;
     }
