@@ -1,5 +1,9 @@
 @charset 'utf-8';
 $bg_primary : #08a600;
+.btn_primary {
+    color: #fff;
+    background-color: $bg_primary;
+}
 .green {
     color: #08a600!important;
 }
