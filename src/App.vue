@@ -14,10 +14,10 @@
                     <div class="join_row">
                         <h3 class="join_title"><label for="id">아이디</label></h3>
                         <span class="ps_box int_id">
-                            <input type="text" id="id" name="id" class="int" title="ID" maxlength="20" >
+                            <input type="text" id="id" name="id" class="int" title="ID" maxlength="20" v-model="id" v-on:blur.stop="checkId">
                             <span class="step_url">@naver.com</span>
                         </span>
-                        <span class="error_next_box" id="idMsg" style="" role="alert">필수 정보입니다.</span>
+                        <span class="error_next_box" id="idMsg" style="" role="alert">{{idmsg}}</span>
                     </div>
 
                     <div class="join_row">
@@ -28,11 +28,11 @@
                         </span>
                         <span class="error_next_box" id="pswd1Msg" style="" role="alert">필수 정보입니다.</span>
                         <h3 class="join_title"><label for="pswd2">비밀번호 재확인</label></h3>
-                        <span class="ps_box int_pass_check" id="pswd2Img">
-                            <input type="password" id="pswd2" name="pswd2" class="int" title="비밀번호 재확인 입력" aria-describedby="pswd2Blind" maxlength="20">
-                            <span id="pswd2Blind" class="wa_blind">설정하려는 비밀번호가 맞는지 확인하기 위해 다시 입력 해주세요.</span>
+                        <span class="ps_box" id="pswd2Img" :class="checkEqual ==  true ? 'int_pass_check2' : 'int_pass_check'">
+                            <input type="password" id="pswd2" name="pswd2" class="int" title="비밀번호 재확인 입력" v-model="repassword" v-on:blur="checkPassEqual" aria-describedby="pswd2Blind" maxlength="20">
+                            <span id="pswd2Blind" class="wa_blind"></span>
                         </span>
-                        <span class="error_next_box" id="pswd2Msg" style="" role="alert">필수 정보입니다.</span>
+                        <span class="error_next_box" id="pswd2Msg" style="" role="alert">{{pswdMsg}}</span>
                     </div>
                 </div>
                 <!-- // 아이디, 비밀번호 입력 -->
@@ -42,7 +42,7 @@
                     <div class="join_row">
                         <h3 class="join_title"><label for="name">이름</label></h3>
                         <span class="ps_box box_right_space">
-                            <input type="text" id="name" name="name" title="이름" class="int" maxlength="40" v-on:blur.stop="checkRequire(this)">
+                            <input type="text" id="name" name="name" title="이름" class="int" maxlength="40" v-model="chkname" v-on:blur.stop="checkNameRequire">
                         </span>
                         <span class="error_next_box" id="nameMsg" style="" role="alert">필수 정보입니다.</span>
                     </div>
@@ -160,11 +160,18 @@ export default {
   components :{TestHeader,TestFooter,BasicButton,NationNumber},
   data () {
       return {
-          password :''
+          password :'',
+          repassword :'',
+          chkname : '',
+          id:'',
+          idmsg:'',
+          pswdMsg:'',
+          checkEqual : false
       }
   },
-  mounted (){
-      var inputs = document.getElementsByTagName("input");
+  created (){
+    //input 에 focus시 스타일 지정
+    var inputs = document.getElementsByClassName("int");
 
     for(var i = 0; i < inputs.length; ++i){
         inputs[i].onfocus = function() {
@@ -176,15 +183,69 @@ export default {
     }
   },
   methods : {
+      //아이디 체크 유효성 검사
+      checkId : function(){
+          var regExpSpace = /\s/g; // 공백체크
+          var regExpUpper = /[A-Z]/; //대문자체크
+          var regExpKor = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/; //한글체크
+          var regExpSpc = /[~!@#$%^&*()+|<>?:{}]/; // 특수문자
+          var id = this.id;
+          var idLength = id.length;
+          var idMsg = document.getElementById("idMsg");
+          //console.log(regExpID.test(id))
+          
+          if (idLength <= 0){
+              //입력이 안되었을 경우
+              idMsg.style.display = "block";
+              idMsg.classList.remove("green");
+              this.idmsg = "필수 정보입니다.";
+          } else {
+              // 아이디 유효성 체크
+              if (regExpSpace.test(id) || regExpUpper.test(id) || regExpKor.test(id)  || regExpSpc.test(id) || (idLength < 5 || idLength > 20) ) {
+              idMsg.style.display = "block";
+              idMsg.classList.remove("green");
+              this.idmsg = "5~20자의 영문 소문자, 숫자와 특수기호(_),(-)만 사용 가능합니다.";
+             } else{
+              idMsg.style.display = "block";
+              idMsg.classList.add("green");
+              this.idmsg = "멋진 아이디네요!";
+             }
+          }
+      },
       //비밀번호 체크 유효성 검사
       checkPassword : function(){
           var regExpPw = /(?=.*\d{1,50})(?=.*[~`!@#$%\^&*()-+=]{1,50})(?=.*[a-zA-Z]{2,50}).{8,16}$/;
           var password = this.password;
           console.log(password.length)
           if (!regExpPw.test(password)){
-              console.log("사용불가");
+              
           } else {
-              console.log("사용가능")
+              
+          }
+      },
+      //이름 필수입력 체크
+      checkNameRequire : function(){
+          var name = this.chkname;
+          var nameMsg = document.getElementById("nameMsg");
+          if(name.length == 0){
+              nameMsg.style.display = "block";
+          } else{
+              nameMsg.style.display = "none";
+          }
+      },
+      checkPassEqual : function(){
+          var pswd2Msg = document.getElementById("pswd2Msg");
+          var pswd2Img = document.getElementById("pswd2Img");
+          if(this.repassword.length <= 0){
+              pswd2Msg.style.display ="block";
+              this.pswdMsg ="필수 정보입니다."
+          }
+          if(this.password != this.repassword){
+              this.pswdMsg ="비밀번호가 일치하지 않습니다."
+              pswd2Msg.style.display ="block";
+          } else {
+              this.checkEqual = true;
+              pswd2Msg.style.display ="none";
           }
       }
   }
@@ -214,8 +275,8 @@ export default {
         &.int_id{padding-right: 110px;}
         &.focus{border: solid 1px #08a600;}
         &.int_pass,
-        &.ps_box.int_pass_check{padding-right: 40px;}
-        &.int_pass,&.int_pass_check{
+        &.ps_box.int_pass_check,&.ps_box.int_pass_check2{padding-right: 40px;}
+        &.int_pass,&.int_pass_check,&.int_pass_check2{
             &:after{
                 content: '';
                 display: inline-block;
