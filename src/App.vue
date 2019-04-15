@@ -197,7 +197,7 @@ export default {
           
           if (idLength <= 0){
               //입력이 안되었을 경우
-              consoel.log("아이디 입력 안됨");
+              console.log("아이디 입력 안됨");
               idMsg.style.display = "block";
               consoel.log("여기");
               idMsg.classList.remove("green");
