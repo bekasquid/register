@@ -23,7 +23,7 @@
                     <div class="join_row">
                         <h3 class="join_title"><label for="pswd1">비밀번호</label></h3>
                         <span class="ps_box int_pass" id="pswd1Img">
-                            <input type="password" id="pswd1" name="pswd1" class="int" title="비밀번호 입력" aria-describedby="pswd1Msg" maxlength="20" v-model="password" v-on:keyup="checkPassword">
+                            <input type="password" id="pswd1" name="pswd1" class="int" title="비밀번호 입력" aria-describedby="pswd1Msg" maxlength="20" v-model="password" v-on:blur="checkPassword">
                             <span class="lbl"><span id="pswd1Span" class="step_txt">{{stepTxt}}</span></span>
                         </span>
                         <span class="error_next_box" id="pswd1Msg" role="alert">{{pswd1msg}}</span>
@@ -194,7 +194,7 @@ export default {
           var id = this.id;
           var idLength = id.length;
           var idMsg = document.getElementById("idMsg");
-          //console.log(regExpID.test(id))
+          console.log(idLength)
           
           if (idLength <= 0){
               //입력이 안되었을 경우
@@ -221,22 +221,26 @@ export default {
           var pswd1Msg = document.getElementById("pswd1Msg");
           var pswd1Img = document.getElementById("pswd1Img");
           var pswd1Span = document.getElementById("pswd1Span");
-          
-                    
-          if (!regExpPw.test(password)){
-            pswd1Msg.style.display="block";
-            pswd1Img.classList.remove("int_pass");
-            pswd1Img.classList.remove("int_pass_step4");
-            pswd1Img.classList.add("int_pass_step1");
-            this.pswd1msg="8~16자 영문 대 소문자, 숫자, 특수문자를 사용하세요";
-            this.stepTxt ="사용불가";
+          if(password.length == 0 ){
+              this.pswd1msg="필수 정보입니다";
           } else {
-              pswd1Img.classList.remove("int_pass");
-              pswd1Img.classList.remove("int_pass_step1");
-              pswd1Img.classList.add("int_pass_step4");
-              pswd1Msg.style.display="none";
-              this.stepTxt ="사용가능";
+                if (!regExpPw.test(password)){
+                    pswd1Msg.style.display="block";
+                    pswd1Img.classList.remove("int_pass");
+                    pswd1Img.classList.remove("int_pass_step4");
+                    pswd1Img.classList.add("int_pass_step1");
+                    this.pswd1msg="8~16자 영문 대 소문자, 숫자, 특수문자를 사용하세요";
+                    this.stepTxt ="사용불가";
+                } else {
+                    pswd1Img.classList.remove("int_pass");
+                    pswd1Img.classList.remove("int_pass_step1");
+                    pswd1Img.classList.add("int_pass_step4");
+                    pswd1Msg.style.display="none";
+                    this.stepTxt ="사용가능";
+                }
           }
+                    
+         
       },
       //이름 필수입력 체크
       checkNameRequire : function(){
