@@ -24,9 +24,9 @@
                         <h3 class="join_title"><label for="pswd1">비밀번호</label></h3>
                         <span class="ps_box int_pass" id="pswd1Img">
                             <input type="password" id="pswd1" name="pswd1" class="int" title="비밀번호 입력" aria-describedby="pswd1Msg" maxlength="20" v-model="password" v-on:keyup="checkPassword">
-                            <span class="lbl"><span id="pswd1Span" class="step_txt"></span></span>
+                            <span class="lbl"><span id="pswd1Span" class="step_txt">{{stepTxt}}</span></span>
                         </span>
-                        <span class="error_next_box" id="pswd1Msg" style="" role="alert">필수 정보입니다.</span>
+                        <span class="error_next_box" id="pswd1Msg" role="alert">{{pswd1msg}}</span>
                         <h3 class="join_title"><label for="pswd2">비밀번호 재확인</label></h3>
                         <span class="ps_box" id="pswd2Img" :class="checkEqual ==  true ? 'int_pass_check2' : 'int_pass_check'">
                             <input type="password" id="pswd2" name="pswd2" class="int" title="비밀번호 재확인 입력" v-model="repassword" v-on:blur="checkPassEqual" aria-describedby="pswd2Blind" maxlength="20">
@@ -166,6 +166,8 @@ export default {
           id:'',
           idmsg:'',
           pswdMsg:'',
+          pswd1msg:'',
+          stepTxt:'',
           checkEqual : false
       }
   },
@@ -214,13 +216,26 @@ export default {
       },
       //비밀번호 체크 유효성 검사
       checkPassword : function(){
-          var regExpPw = /(?=.*\d{1,50})(?=.*[~`!@#$%\^&*()-+=]{1,50})(?=.*[a-zA-Z]{2,50}).{8,16}$/;
+          var regExpPw = /(?=.*\d{1,50})(?=.*[~`!@#$%\^&*()-+=]{1,50})(?=.*[a-zA-Z]{2,50}).{7,18}$/;
           var password = this.password;
-          console.log(password.length)
+          var pswd1Msg = document.getElementById("pswd1Msg");
+          var pswd1Img = document.getElementById("pswd1Img");
+          var pswd1Span = document.getElementById("pswd1Span");
+          
+                    
           if (!regExpPw.test(password)){
-              
+            pswd1Msg.style.display="block";
+            pswd1Img.classList.remove("int_pass");
+            pswd1Img.classList.remove("int_pass_step4");
+            pswd1Img.classList.add("int_pass_step1");
+            this.pswd1msg="8~16자 영문 대 소문자, 숫자, 특수문자를 사용하세요";
+            this.stepTxt ="사용불가";
           } else {
-              
+              pswd1Img.classList.remove("int_pass");
+              pswd1Img.classList.remove("int_pass_step1");
+              pswd1Img.classList.add("int_pass_step4");
+              pswd1Msg.style.display="none";
+              this.stepTxt ="사용가능";
           }
       },
       //이름 필수입력 체크
@@ -236,17 +251,19 @@ export default {
       checkPassEqual : function(){
           var pswd2Msg = document.getElementById("pswd2Msg");
           var pswd2Img = document.getElementById("pswd2Img");
-          if(this.repassword.length <= 0){
+          if(this.repassword.length == 0){
               pswd2Msg.style.display ="block";
               this.pswdMsg ="필수 정보입니다."
-          }
-          if(this.password != this.repassword){
+          } else {
+              if(this.password != this.repassword){
               this.pswdMsg ="비밀번호가 일치하지 않습니다."
               pswd2Msg.style.display ="block";
-          } else {
-              this.checkEqual = true;
-              pswd2Msg.style.display ="none";
+            } else {
+                this.checkEqual = true;
+                pswd2Msg.style.display ="none";
+            }
           }
+          
       }
   }
 }
@@ -276,7 +293,7 @@ export default {
         &.focus{border: solid 1px #08a600;}
         &.int_pass,
         &.ps_box.int_pass_check,&.ps_box.int_pass_check2{padding-right: 40px;}
-        &.int_pass,&.int_pass_check,&.int_pass_check2{
+        &.int_pass,&.int_pass_check,&.int_pass_check2,&.int_pass_step1,&.int_pass_step4{
             &:after{
                 content: '';
                 display: inline-block;
@@ -288,6 +305,29 @@ export default {
                 margin-top: -10px;
                 cursor: pointer;
             }
+        }
+        &.int_pass_step1{
+            padding: 10px 93px 10px 14px;
+            &:after {
+                background: #fff url(https://static.nid.naver.com/images/ui/join/m_icon_not_use.png) 0 0 no-repeat;
+                -webkit-background-size: 18px 20px;
+                background-size: 18px 20px;
+            }
+        }
+        &.int_pass_step4{
+            padding: 10px 93px 10px 14px;
+            &:after {
+                background: #fff url(https://static.nid.naver.com/images/ui/join/m_icon_safe.png) 0 0 no-repeat;
+                -webkit-background-size: 17px 20px;
+                background-size: 18px 20px;
+            }
+        }
+        .lbl {
+            left: 0;
+            padding: 0 14px;
+            width: 100%;
+            -webkit-box-sizing: border-box;
+            box-sizing: border-box;
         }
     }
     .ps_box_disable {
@@ -316,6 +356,11 @@ export default {
         width: 20px;
         height: 20px;
         background: #fff url(https://static.nid.naver.com/images/ui/join/pc_icon_check_enable_180417.png) 0 0 no-repeat;
+    }
+    .ps_box.int_pass_step1:after {
+        background: #fff url(https://static.nid.naver.com/images/ui/join/m_icon_not_use.png) 0 0 no-repeat;
+        -webkit-background-size: 18px 20px;
+        background-size: 18px 20px;
     }
    
     .join_title {

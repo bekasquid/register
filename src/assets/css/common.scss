@@ -7,6 +7,27 @@ $bg_primary : #08a600;
 .green {
     color: #08a600!important;
 }
+.red{
+    color:#ff0000 !important;
+}
+.lbl {
+    display: block;
+    position: absolute;
+    top: 50%;
+    left: 14px;
+    margin-top: -9px;
+    font-size: 15px;
+    line-height: 18px;
+    color: #8e8e8e;
+    z-index: 9;
+}
+.step_txt {
+    display: inline-block;
+    position: absolute;
+    top: 1px;
+    right: 38px;
+    font-size: 12px;
+}
 .border-box {
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
