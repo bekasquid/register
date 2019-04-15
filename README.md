@@ -2,6 +2,11 @@
 
 > st unitas test
 
+# settings
+
+node v11.10.0
+yarn v1.13.0
+
 ## Build Setup
 
 ``` bash
