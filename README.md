@@ -4,8 +4,8 @@
 
 # settings
 
-node v11.10.0
-yarn v1.13.0
+node v10.15.0
+npm v6.9.0
 
 ## Build Setup
 
