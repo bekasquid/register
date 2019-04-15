@@ -14,7 +14,7 @@
                     <div class="join_row">
                         <h3 class="join_title"><label for="id">아이디</label></h3>
                         <span class="ps_box int_id">
-                            <input type="text" id="id" name="id" class="int" title="ID" maxlength="20" v-model="id" v-on:blur.stop="checkId">
+                            <input type="text" id="id" name="id" class="int" title="ID" maxlength="20" v-model="id" v-on:blur="checkId">
                             <span class="step_url">@naver.com</span>
                         </span>
                         <span class="error_next_box" id="idMsg" style="" role="alert">{{idmsg}}</span>
@@ -42,7 +42,7 @@
                     <div class="join_row">
                         <h3 class="join_title"><label for="name">이름</label></h3>
                         <span class="ps_box box_right_space">
-                            <input type="text" id="name" name="name" title="이름" class="int" maxlength="40" v-model="chkname" v-on:blur.stop="checkNameRequire">
+                            <input type="text" id="name" name="name" title="이름" class="int" maxlength="40" v-model="chkname" v-on:blur="checkNameRequire">
                         </span>
                         <span class="error_next_box" id="nameMsg" style="" role="alert">필수 정보입니다.</span>
                     </div>
