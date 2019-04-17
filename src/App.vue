@@ -199,7 +199,6 @@ export default {
               //입력이 안되었을 경우
               console.log("아이디 입력 안됨");
               idMsg.style.display = "block";
-              consoel.log("여기");
               idMsg.classList.remove("green");
               this.idmsg = "필수 정보입니다.";
           } else {
@@ -267,9 +266,10 @@ export default {
                 this.checkEqual = true;
                 pswd2Msg.style.display ="none";
             }
-          }
-          
-      }
+          }   
+      },
+      //가입하기
+      
   }
 }
 </script>
